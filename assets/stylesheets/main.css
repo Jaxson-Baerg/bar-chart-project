@@ -2,7 +2,7 @@ body {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-.topbar {
+.topbar { /*styling for title bar at top of page*/
   height: 80px;
   width: 100%;
   position: fixed;
@@ -13,11 +13,11 @@ body {
   padding-top: 10px;
 }
 
-#mainTitle {
+#mainTitle { /*styling for title text in top bar*/
   margin-left: 220px;
 }
 
-.sidebar {
+.sidebar { /*styling for the side bar where all of the options are customized*/
   height: 100%;
   width: 200px;
   position: fixed;
@@ -29,20 +29,38 @@ body {
   padding-top: 30px;
 }
 
-.sidebar h2 {
+.sidebar h2 { /*sidebar input titles*/
   color: peachpuff;
+  margin-bottom: 5px;
+}
+.sidebar p {
+  color: plum;
+  margin-top: 5px;
 }
 
-.sidebar > * {
-  padding-left: 30px;
+.sidebar > * { /*change styling for elements in sidebar*/
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
-#generate {
+#options h5 { /*change styling for elements in the options form*/
+  color: pink;
+  font-size: 12px;
+  margin: 0px;
+  padding: 5px;
+}
+
+.incomplete {
+  border-color: red;
+}
+
+#generate, #reset { /*styling for buttons on sidebar*/
   padding-left: 5px;
   margin-left: 30px;
+  margin-top: 10px;
 }
 
-.chart {
+.chart { /*styling for main chart area*/
   margin-left: 200px;
   padding: 10px 10px;
 }

@@ -1,25 +1,52 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- initial script setup -->
     <meta charset="utf-8"/>
     <script src="js/jquery-3.6.1.js"></script>
     <script src="js/main.js"></script>
     <link rel="stylesheet" href="assets/stylesheets/main.css">
   </head>
   <body>
+    <!-- code for top bar on page -->
     <div class="topbar">
+
+      <!-- title for the top bar -->
       <h1 id="mainTitle">Customize and Generate a Bar Chart</h1>
       <p id="test"></p>
     </div>
 
+    <!-- code for side bar on page -->
     <div class="sidebar">
+
+      <!-- title for side bar -->
       <h2>Choose Options:</h2>
-      <input type="text" id="valuePosition" placeholder="Top, Middle, Bottom...">
-      <button id="generate" onclick="pullOptions()">Generate</button>
+      <p>* = mandatory</p>
+
+      <!-- code for user input to configure the bar chart -->
+      <form id="options">
+
+        <!-- user inputs -->
+        <h5>Main Category 1: *</h5>
+        <input type="text" class="userInput" id="mainCategoryOne" placeholder="Gender..." value="">
+        <h5>Sub Category 1: *</h5>
+        <input type="text" class="userInput" id="subCategoryOne" placeholder="Male, Female..." value="">
+        <h5>Main Category 2: *</h5>
+        <input type="text" class="userInput" id="mainCategoryTwo" placeholder="Flavour..." value="">
+        <h5>Sub Category 2: *</h5>
+        <input type="text" class="userInput" id="subCategoryTwo" placeholder="Chocolate, Vanilla..." value="">
+        <h5>Position of Values: *</h5>
+        <input type="text" class="userInput" id="valuePosition" placeholder="Top, Middle, Bottom..." value="">
+        
+        <!-- buttons to reset or submit -->
+        <button id="reset" type="reset">Reset Options</button>
+        <button id="generate" type="button">Generate</button>
+      </form>
     </div>
 
+    <!-- code for chart implementation -->
     <div class="chart">
-
+      
     </div>
   </body>
 </html>
