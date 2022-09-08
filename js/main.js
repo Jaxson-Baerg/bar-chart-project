@@ -15,10 +15,11 @@ const getValuePosition = function() {
 
 // Function to pull data
 const pullOptions = function() {
+  data = [];
   // Pushes pulled form data into master data array
   data.push(getCategories());
   data.push(getValuePosition());
-  console.log(data);
+  console.log(data); // Test output
 };
 
 // Function to check if data was filled out
@@ -27,7 +28,8 @@ const filledOut = function() {
   let complete = true;
   for (let i = 0; i < inputs.length; i++) { // Loop through form to see if any inputs are blank
     if (inputs[i].value === "") { // If any input is incomplete, visually show
-      inputs[i].classList.add("incomplete");
+      inputs[i].classList.add("incomplete"); // Add class with animation
+      setInterval(function() {inputs[i].classList.remove("incomplete")}, 5000); // Remove class with animation
       complete = false;
     }
   }

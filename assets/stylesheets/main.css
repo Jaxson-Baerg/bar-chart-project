@@ -50,8 +50,15 @@ body {
   padding: 5px;
 }
 
-.incomplete {
+@keyframes pulse { /*parameters for pulse animation when input box isn't filled in*/
+  0% { opacity: 1; }
+  50% { opacity: 0.1; }
+  100% { opacity: 1; }
+}
+
+.incomplete { /*class to be added to input box if not filled in*/
   border-color: red;
+  animation: pulse 1s linear 1s 2;
 }
 
 #generate, #reset { /*styling for buttons on sidebar*/
