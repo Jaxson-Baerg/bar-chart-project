@@ -26,12 +26,13 @@ body {
   left: 0;
   background-color: grey;
   overflow-x: hidden;
-  padding-top: 30px;
+  padding-top: 5px;
 }
 
 .sidebar h2 { /*sidebar input titles*/
   color: peachpuff;
   margin-bottom: 5px;
+  margin-top: 5px;
 }
 .sidebar p {
   color: plum;

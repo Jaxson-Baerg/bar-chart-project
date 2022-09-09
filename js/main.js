@@ -15,33 +15,71 @@ const getCategoryValues = function() {
     categoryValues[i] = Number(categoryValues[i]);
   }
   return categoryValues;
-}
+};
 
 // Function to get values of scale
 const getScaleValue = function() {
   return Number(document.getElementById("scaleValue").value);
-}
+};
 
 // Function to get scale by value, less than max scale value
 const getScaleByValue = function() {
   return Number(document.getElementById("scaleByValue").value);
-}
+};
 
 // Function to get value position from form
 const getValuePosition = function() {
   return document.getElementById("valuePosition").value;
 };
 
+// Function to get width of bars
+const getBarWidth = function() {
+  return Number(document.getElementById("barWidth").value);
+};
+
+// Function to get height of bars
+const getBarHeight = function() {
+  return Number(document.getElementById("barHeight").value);
+};
+
+// Function to get spacing of bars
+const getBarSpacing = function() {
+  return Number(document.getElementById("barSpacing").value);
+};
+
+// Function to get color of bars
+const getBarColour = function() {
+  return document.getElementById("barColour").value;
+};
+
+// Function to get size of font for labels
+const getFontSize = function() {
+  return Number(document.getElementById("fontSize").value);
+};
+
+// Function to get color of font for labels
+const getFontColour = function() {
+  return document.getElementById("fontColour").value;
+};
+
 // Function to pull data
 const pullOptions = function() {
-  data = [];
+  options = [];
+  data = []
   // Pushes pulled form data into master data array
-  data.push(getCategories());
+  options.push(getCategories());
   data.push(getCategoryValues());
-  data.push(getScaleValue());
-  data.push(getScaleByValue());
-  data.push(getValuePosition());
-  console.log(data); // Test output
+  options.push(getScaleValue());
+  options.push(getScaleByValue());
+  options.push(getValuePosition());
+  options.push(getBarWidth());
+  options.push(getBarHeight());
+  options.push(getBarSpacing());
+  options.push(getBarColour());
+  options.push(getFontSize());
+  options.push(getFontColour());
+  console.log(options); // Test output
+  console.log(data);
 };
 
 // Function to check if data was filled out
@@ -67,7 +105,8 @@ const checkForm = function() {
   }
 }
 
-let data = []; // Array containing all data about bar chart
+let options = []; // Array containing all custome options about bar chart
+let data = []; // Array containing data for bar chart
 
 // Onloads so html file is loaded first before listening
 window.onload = function() {
