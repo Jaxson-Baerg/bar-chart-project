@@ -28,16 +28,32 @@
 
         <!-- user inputs -->
         <h5>Main Category 1: *</h5>
-        <input type="text" class="userInput" id="mainCategoryOne" placeholder="Gender..." value="">
+        <input type="text" class="mandatoryInput" id="mainCategoryOne" placeholder="Favourite Colour..." value="">
         <h5>Sub Category 1: *</h5>
-        <input type="text" class="userInput" id="subCategoryOne" placeholder="Male, Female..." value="">
+        <input type="text" class="mandatoryInput" id="subCategoryOne" placeholder="Red, Blue, Yellow..." value="">
         <h5>Main Category 2: *</h5>
-        <input type="text" class="userInput" id="mainCategoryTwo" placeholder="Flavour..." value="">
-        <h5>Sub Category 2: *</h5>
-        <input type="text" class="userInput" id="subCategoryTwo" placeholder="Chocolate, Vanilla..." value="">
+        <input type="text" class="mandatoryInput" id="mainCategoryTwo" placeholder="Children..." value="">
+        <h5>Sub Category 2:</h5>
+        <input type="text" id="subCategoryTwo" placeholder="Male, Female..." value="">
+        <h5>Category Values: *</h5>
+        <input type="text" class="mandatoryInput" id="categoryValues" placeholder="3, 7, 5..." value="">
+        <h5>Scale (max): *</h5>
+        <input type="number" class="mandatoryInput" id="scaleValue" placeholder="100..." value="">
+        <h5>Scale-By (5, 10 15): *</h5>
+        <input type="number" class="mandatoryInput" id="scaleByValue" placeholder="5..." value="">
         <h5>Position of Values: *</h5>
-        <input type="text" class="userInput" id="valuePosition" placeholder="Top, Middle, Bottom..." value="">
+        <input type="text" class="mandatoryInput" id="valuePosition" placeholder="Top, Middle, Bottom..." value="">
         
+        <!-- bar customization -->
+        <h5>Bar Width (px):</h5>
+        <input type="number" id="barWidth" placeholder="5, 10, 20..." value="">
+        <h5>Bar Height (px):</h5>
+        <input type="number" id="barHeight" placeholder="5, 10, 20..." value="">
+        <h5>Bar Spacing (px):</h5>
+        <input type="number" id="barSpacing" placeholder="5, 10, 20..." value="">
+        <h5>Bar Colour (hashcodes):</h5>
+        <input type="text" id="barColour" placeholder="cc0051" value="">
+
         <!-- buttons to reset or submit -->
         <button id="reset" type="reset">Reset Options</button>
         <button id="generate" type="button">Generate</button>
