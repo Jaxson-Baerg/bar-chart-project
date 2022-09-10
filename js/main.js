@@ -47,9 +47,65 @@ const getBarSpacing = function() {
   return Number(document.getElementById("barSpacing").value);
 };
 
-// Function to get color of bars
+// Function to create pickers for colour of bars
+const createBarColourPicker = function() {
+  let cats = options[0].subCatOne;
+  let form = document.getElementById("colourization");
+
+  // Clear out previously added colour pickers to form for fresh start
+  const colourPickerElements = document.getElementsByClassName("colourPickers");
+  console.log(colourPickerElements);
+  while (colourPickerElements.length > 0) {
+    colourPickerElements[0].parentNode.removeChild(colourPickerElements[0]);
+  }
+
+  // Define and append header for pickers
+  let header = document.createElement("h5");
+  header.innerHTML = "Bar Colours:";
+  header.setAttribute("class", "colourPickers");
+  form.appendChild(header);
+
+  // Append colour pickers based off inputted categories
+  for (let i = 0; i < cats.length; i++) {
+    let lab = document.createElement("label");
+    let inp = document.createElement("input");
+
+    // Define and append labels for each picker
+    lab.innerHTML = cats[i] + ":";
+    lab.setAttribute("for", cats[i]);
+    lab.setAttribute("class", "colourPickers");
+    form.appendChild(lab);
+
+    // Define and append pickers
+    inp.setAttribute("value", "#3E89B8");
+    inp.setAttribute("type", "color");
+    inp.setAttribute("id", cats[i]);
+    inp.setAttribute("class", "colourPickers");
+    form.appendChild(inp);
+  }
+
+  // Define and append button for submitting picked colours
+  let button = document.createElement("button");
+  button.setAttribute("id", "submitColours");
+  button.setAttribute("class", "colourPickers");
+  button.setAttribute("type", "button");
+  button.innerHTML = "Submit Colours";
+  form.appendChild(button);
+
+  document.getElementById("submitColours").addEventListener("click", function() {getBarColour()}); // Add listener for the submit button to be clicked and calls the function to get inputted colours
+};
+
+// Function to get colour of bars
 const getBarColour = function() {
-  return document.getElementById("barColour").value;
+  categoryBarColour = {};
+  let cats = options[0].subCatOne;
+
+  // Pushed inputted colours of bars into global object
+  for (let i = 0; i < cats.length; i++) {
+    categoryBarColour[cats[i]] = document.getElementById(cats[i]).value;
+  }
+
+  console.log(categoryBarColour); // Test output
 };
 
 // Function to get size of font for labels
@@ -66,7 +122,7 @@ const getFontColour = function() {
 const pullOptions = function() {
   options = [];
   data = []
-  // Pushes pulled form data into master data array
+  // Pushes pulled form data into master data and options array
   options.push(getCategories());
   data.push(getCategoryValues());
   options.push(getScaleValue());
@@ -75,9 +131,11 @@ const pullOptions = function() {
   options.push(getBarWidth());
   options.push(getBarHeight());
   options.push(getBarSpacing());
-  options.push(getBarColour());
   options.push(getFontSize());
   options.push(getFontColour());
+
+  createBarColourPicker(); // Create pickers for colour of bars
+
   console.log(options); // Test output
   console.log(data);
 };
@@ -96,6 +154,13 @@ const filledOut = function() {
   return complete; // Return if form is complete
 };
 
+// Function to add elements in html to show drawn and generated bar chart
+const createChart = function() {
+  // Declarations to pull in variables from css stylesheet
+  const root = document.querySelector(':root');
+  const rootStyles = getComputedStyle(root);
+};
+
 // Function to call functions to check form and pull from it
 const checkForm = function() {
   if (filledOut()) {
@@ -103,10 +168,13 @@ const checkForm = function() {
   } else {
     console.log("Incomplete Form");
   }
-}
+
+  createChart();
+};
 
 let options = []; // Array containing all custome options about bar chart
 let data = []; // Array containing data for bar chart
+let categoryBarColour = {}; // Object containing colours for each bar associated with a category
 
 // Onloads so html file is loaded first before listening
 window.onload = function() {

@@ -1,3 +1,9 @@
+:root {
+  --barSpacing: 5px;
+  --barColour: #525252;
+  --labelFontColouor: #525252;
+}
+
 body {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
@@ -51,6 +57,32 @@ body {
   padding: 5px;
 }
 
+.barColours {
+  margin-bottom: 30px;
+  margin-right: 10px;
+}
+
+#colourization h5 { /*change styling for elements in the colourization form*/
+  color: pink;
+  font-size: 12px;
+  margin: 0px;
+  padding: 5px;
+}
+
+#colourization label {
+  color: rgb(245, 148, 180);
+  font-size: 14px;
+  margin-left: 5px;
+  margin-top: 5px;
+  padding: 5px;
+}
+
+#colourization input {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
 @keyframes pulse { /*parameters for pulse animation when input box isn't filled in*/
   0% { opacity: 1; }
   50% { opacity: 0.1; }
@@ -68,7 +100,41 @@ body {
   margin-top: 10px;
 }
 
+#generate {
+  margin-bottom: 30px;
+}
+
+#submitColours {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
 .chart { /*styling for main chart area*/
   margin-left: 200px;
   padding: 10px 10px;
+}
+
+#xAxis {
+  top: 85%;
+  left: 35%;
+  margin-bottom: 30px;
+  width: 50%;
+  height: 1px;
+  border-top: 1px solid black;
+  position: absolute;
+}
+
+#yAxis {
+  top: 15%;
+  left: 35%;
+  margin-bottom: 30px;
+  width: 1px;
+  height: 70%;
+  border-left: 1px solid black;
+  position: absolute;
+}
+
+.bars {
+  background-color: var(--barColour);
+
 }
