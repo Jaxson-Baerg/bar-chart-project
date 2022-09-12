@@ -1,16 +1,20 @@
+let options = []; // Array containing all custome options about bar chart
+let data = []; // Array containing data for bar chart
+let categoryBarColour = {}; // Object containing colours for each bar associated with a category
+
 // Function to get category data from form
 const getCategories = function() {
   let cat = {};
-  cat.mainCatOne = document.getElementById("mainCategoryOne").value;
-  cat.subCatOne = document.getElementById("subCategoryOne").value.split(", ");
-  cat.mainCatTwo = document.getElementById("mainCategoryTwo").value;
-  cat.subCatTwo = document.getElementById("subCategoryTwo").value.split(", ");
+  cat.mainCatOne = $("#mainCategoryOne").val();
+  cat.subCatOne = $("#subCategoryOne").val().split(", ");
+  cat.mainCatTwo = $("#mainCategoryTwo").val();
+  cat.subCatTwo = $("#subCategoryTwo").val().split(", ");
   return cat;
 };
 
 // Function to get category values
 const getCategoryValues = function() {
-  let categoryValues = document.getElementById("categoryValues").value.split(", ");
+  let categoryValues = $("#categoryValues").val().split(", ");
   for (let i = 0; i < categoryValues.length; i++) {
     categoryValues[i] = Number(categoryValues[i]);
   }
@@ -19,80 +23,56 @@ const getCategoryValues = function() {
 
 // Function to get values of scale
 const getScaleValue = function() {
-  return Number(document.getElementById("scaleValue").value);
+  return Number($("#scaleValue").val());
 };
 
 // Function to get scale by value, less than max scale value
 const getScaleByValue = function() {
-  return Number(document.getElementById("scaleByValue").value);
+  return Number($("#scaleByValue").val());
 };
 
 // Function to get value position from form
 const getValuePosition = function() {
-  return document.getElementById("valuePosition").value;
+  return $("#valuePosition").val();
 };
 
 // Function to get width of bars
 const getBarWidth = function() {
-  return Number(document.getElementById("barWidth").value);
+  return Number($("#barWidth").val());
 };
 
 // Function to get height of bars
 const getBarHeight = function() {
-  return Number(document.getElementById("barHeight").value);
+  return Number($("#barHeight").val());
 };
 
 // Function to get spacing of bars
 const getBarSpacing = function() {
-  return Number(document.getElementById("barSpacing").value);
+  return Number($("#barSpacing").val());
 };
 
 // Function to create pickers for colour of bars
 const createBarColourPicker = function() {
   let cats = options[0].subCatOne;
-  let form = document.getElementById("colourization");
+  const form = $("#colourization");
 
   // Clear out previously added colour pickers to form for fresh start
-  const colourPickerElements = document.getElementsByClassName("colourPickers");
-  console.log(colourPickerElements);
-  while (colourPickerElements.length > 0) {
-    colourPickerElements[0].parentNode.removeChild(colourPickerElements[0]);
-  }
+  $(".colourPickers").remove();
 
   // Define and append header for pickers
-  let header = document.createElement("h5");
-  header.innerHTML = "Bar Colours:";
-  header.setAttribute("class", "colourPickers");
-  form.appendChild(header);
+  form.append("<h5 class='colourPickers'>Bar Colours:</h5>");
 
   // Append colour pickers based off inputted categories
   for (let i = 0; i < cats.length; i++) {
-    let lab = document.createElement("label");
-    let inp = document.createElement("input");
-
     // Define and append labels for each picker
-    lab.innerHTML = cats[i] + ":";
-    lab.setAttribute("for", cats[i]);
-    lab.setAttribute("class", "colourPickers");
-    form.appendChild(lab);
+    form.append("<label for='" + cats[i] + "' class='colourPickers'>" + cats[i] + ":" + "</label>");
 
     // Define and append pickers
-    inp.setAttribute("value", "#3E89B8");
-    inp.setAttribute("type", "color");
-    inp.setAttribute("id", cats[i]);
-    inp.setAttribute("class", "colourPickers");
-    form.appendChild(inp);
+    form.append("<input id='" + cats[i] + "' class='colourPickers' type='color' value='#3E89B8'>");
   }
 
   // Define and append button for submitting picked colours
-  let button = document.createElement("button");
-  button.setAttribute("id", "submitColours");
-  button.setAttribute("class", "colourPickers");
-  button.setAttribute("type", "button");
-  button.innerHTML = "Submit Colours";
-  form.appendChild(button);
-
-  document.getElementById("submitColours").addEventListener("click", function() {getBarColour()}); // Add listener for the submit button to be clicked and calls the function to get inputted colours
+  form.append("<button id='submitColours' class='colourPickers' type='button' onclick='getBarColour()'>Submit Colours</button>");
 };
 
 // Function to get colour of bars
@@ -102,7 +82,7 @@ const getBarColour = function() {
 
   // Pushed inputted colours of bars into global object
   for (let i = 0; i < cats.length; i++) {
-    categoryBarColour[cats[i]] = document.getElementById(cats[i]).value;
+    categoryBarColour[cats[i]] = $("#" + cats[i]).val();
   }
 
   console.log(categoryBarColour); // Test output
@@ -110,21 +90,23 @@ const getBarColour = function() {
 
 // Function to get size of font for labels
 const getFontSize = function() {
-  return Number(document.getElementById("fontSize").value);
+  return Number($("#fontSize").val());
 };
 
 // Function to get color of font for labels
 const getFontColour = function() {
-  return document.getElementById("fontColour").value;
+  return $("#fontColour").val();
 };
 
 // Function to pull data
 const pullOptions = function() {
   options = [];
   data = []
+
   // Pushes pulled form data into master data and options array
-  options.push(getCategories());
   data.push(getCategoryValues());
+
+  options.push(getCategories());
   options.push(getScaleValue());
   options.push(getScaleByValue());
   options.push(getValuePosition());
@@ -142,15 +124,19 @@ const pullOptions = function() {
 
 // Function to check if data was filled out
 const filledOut = function() {
-  let inputs = document.getElementsByClassName("mandatoryInput");
   let complete = true;
-  for (let i = 0; i < inputs.length; i++) { // Loop through form to see if any inputs are blank
-    if (inputs[i].value === "") { // If any input is incomplete, visually show
-      inputs[i].classList.add("incomplete"); // Add class with animation
-      setInterval(function() {inputs[i].classList.remove("incomplete")}, 3000); // Remove class with animation
+
+  $(".mandatoryInput").each(function() {
+    if ($( this ).val() === "") { // Check if a mandatory input field is empty
+      // Notify visually which field needs completing
+      $( this ).css("border-color", "red");
+      $( this ).fadeOut(500);
+      $( this ).fadeIn(500);
+
       complete = false;
     }
-  }
+  });
+
   return complete; // Return if form is complete
 };
 
@@ -163,6 +149,9 @@ const createChart = function() {
 
 // Function to call functions to check form and pull from it
 const checkForm = function() {
+
+  $(".mandatoryInput").css("border-color", ""); // Clear any previously visual reminders of incomplete input fields
+
   if (filledOut()) {
     pullOptions(); // If the form is completed, pull data from inputs
   } else {
@@ -170,13 +159,4 @@ const checkForm = function() {
   }
 
   createChart();
-};
-
-let options = []; // Array containing all custome options about bar chart
-let data = []; // Array containing data for bar chart
-let categoryBarColour = {}; // Object containing colours for each bar associated with a category
-
-// Onloads so html file is loaded first before listening
-window.onload = function() {
-  document.getElementById("generate").addEventListener("click", function() {checkForm()}); // Listens for the generate button to be clicked and calls check form function
 };
