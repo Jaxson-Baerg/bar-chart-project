@@ -13,7 +13,6 @@
 
       <!-- title for the top bar -->
       <h1 id="mainTitle">Customize and Generate a Bar Chart</h1>
-      <p id="test"></p>
     </div>
 
     <!-- code for side bar on page -->
@@ -21,40 +20,46 @@
 
       <!-- title for side bar -->
       <h2>Choose Options:</h2>
-      <p>* = mandatory</p>
 
       <!-- code for user input to configure the bar chart -->
       <form id="options">
 
         <!-- user inputs -->
-        <h5>Main Category 1: *</h5>
+        <h5>Main Category 1:</h5>
         <input type="text" class="mandatoryInput" id="mainCategoryOne" placeholder="Favourite Colour..." value="">
-        <h5>Sub Category 1: *</h5>
-        <input type="text" class="mandatoryInput" id="subCategoryOne" placeholder="Red, Blue, Yellow..." value="">
-        <h5>Main Category 2: *</h5>
+        <h5>Main Category 2:</h5>
         <input type="text" class="mandatoryInput" id="mainCategoryTwo" placeholder="Children..." value="">
-        <h5>Sub Category 2:</h5>
-        <input type="text" id="subCategoryTwo" placeholder="Male, Female..." value="">
-        <h5>Category Values: *</h5>
-        <input type="text" class="mandatoryInput" id="categoryValues" placeholder="3, 7, 5..." value="">
-        <h5>Scale (max): *</h5>
-        <input type="number" class="mandatoryInput" id="scaleValue" min="1" placeholder="100..." value="">
-        <h5>Scale-By (5, 10 15): *</h5>
-        <input type="number" class="mandatoryInput" id="scaleByValue" min="1" placeholder="5..." value="">
-        <h5>Position of Values: *</h5>
-        <input type="text" class="mandatoryInput" id="valuePosition" placeholder="Top, Middle, Bottom..." value="">
+        <h5 id="subCategoryHeader">Sub Categories 1:</h5>
+        <input type="text" class="mandatoryInput barCategoryName" id="subCategoryOne" placeholder="Red..." value="">
+        <input type="text" class="barCategoryName" placeholder="Red..." value="">
+        <input type="text" class="barCategoryName" placeholder="Red..." value="">
+        <button id="addCategoryButton" type="button" onclick="addCategory()">Add Category</button>
+        <h5 id="categoryValueHeader">Category Values:</h5>
+        <input type="number" class="barCategoryValue mustBeNum" id="categoryValues" placeholder="1..." value="">
+        <input type="number" class="barCategoryValue" placeholder="2..." value="">
+        <input type="number" class="barCategoryValue" placeholder="3..." value="">
+        
+        <!-- axes customization -->
+        <h5 id="scaleValueHeader">Scale (max):</h5>
+        <input type="number" class="mustBeNum" id="scaleValue" min="1" placeholder="100..." value="">
+        <h5>Scale-By (5, 10 15):</h5>
+        <input type="number" class="mustBeNum" id="scaleByValue" min="1" placeholder="5..." value="">
         
         <!-- bar customization -->
+        <h5>Position of Values:</h5>
+        <input type="text" class="mandatoryInput" id="valuePosition" placeholder="Top, Middle, Bottom..." value="">
         <h5>Bar Width (px):</h5>
-        <input type="number" id="barWidth" min="1" placeholder="5, 10, 20..." value="">
+        <input type="number" class="mustBeNum" id="barWidth" min="1" placeholder="5, 10, 20..." value="">
+        <!--
         <h5>Bar Height (px):</h5>
-        <input type="number" id="barHeight" min="1" placeholder="5, 10, 20..." value="">
+        <input type="number" class="mustBeNum" id="barHeight" min="1" placeholder="5, 10, 20..." value="">
         <h5>Bar Spacing (px):</h5>
-        <input type="number" id="barSpacing" min="1" placeholder="5, 10, 20..." value="">
+        <input type="number" class="mustBeNum" id="barSpacing" min="1" placeholder="5, 10, 20..." value="">
+        -->
 
         <!-- font customization -->
         <h5>Font Size (px):</h5>
-        <input type="number" id="fontSize" placeholder="8, 12, 20..." value="">
+        <input type="number" class="mustBeNum" id="fontSize" placeholder="8, 12, 20..." value="">
         <h5>Font Colour:</h5>
         <input type="color" id="fontColour" value="#525252">
 

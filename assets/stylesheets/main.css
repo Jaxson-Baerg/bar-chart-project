@@ -1,9 +1,3 @@
-:root {
-  --barSpacing: 5px;
-  --barColour: #525252;
-  --labelFontColouor: #525252;
-}
-
 body {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
@@ -40,14 +34,9 @@ body {
   margin-bottom: 5px;
   margin-top: 5px;
 }
-.sidebar p {
-  color: plum;
-  margin-top: 5px;
-}
 
 .sidebar > * { /*change styling for elements in sidebar*/
   padding-left: 15px;
-  padding-right: 20px;
 }
 
 #options h5 { /*change styling for elements in the options form*/
@@ -57,36 +46,32 @@ body {
   padding: 5px;
 }
 
-.barColours {
+.barColours { /*styling for container of colour pickers*/
   margin-bottom: 30px;
-  margin-right: 10px;
+  padding-right: 10px;
 }
 
 #colourization h5 { /*change styling for elements in the colourization form*/
-  color: pink;
-  font-size: 12px;
+  color: plum;
+  font-size: 15px;
   margin: 0px;
   padding: 5px;
 }
 
-#colourization label {
-  color: rgb(245, 148, 180);
+#colourization label { /*styling for label for colour pickers*/
+  color: pink;
   font-size: 14px;
   margin-left: 5px;
   margin-top: 5px;
   padding: 5px;
+  position: relative;
 }
 
-#colourization input {
+#colourization input { /*styling for colour pickers*/
   margin-left: 5px;
   margin-right: 5px;
   margin-top: 5px;
-}
-
-@keyframes pulse { /*parameters for pulse animation when input box isn't filled in*/
-  0% { opacity: 1; }
-  50% { opacity: 0.1; }
-  100% { opacity: 1; }
+  position: relative;
 }
 
 #generate, #reset { /*styling for buttons on sidebar*/
@@ -104,32 +89,36 @@ body {
   margin-top: 10px;
 }
 
-.chart { /*styling for main chart area*/
-  margin-left: 200px;
-  padding: 10px 10px;
-}
-
 #xAxis {
-  top: 85%;
-  left: 35%;
-  margin-bottom: 30px;
-  width: 50%;
+  top: 75%;
+  left: 10%;
+  width: 60%;
   height: 1px;
   border-top: 1px solid black;
   position: absolute;
 }
 
 #yAxis {
-  top: 15%;
-  left: 35%;
-  margin-bottom: 30px;
+  top: 5%;
+  left: 10%;
   width: 1px;
   height: 70%;
   border-left: 1px solid black;
   position: absolute;
 }
 
-.bars {
-  background-color: var(--barColour);
+.chart { /*styling for main chart area*/
+  left: 200px;
+  top: 80px;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
 
+.bars {
+  left: 10%;
+  top: 5%;
+  width: 60%;
+  height: 70%;
+  position: absolute;
 }
