@@ -71,7 +71,7 @@ body {
   margin-left: 5px;
   margin-right: 5px;
   margin-top: 5px;
-  position: relative;
+  position: static;
 }
 
 #generate, #reset { /*styling for buttons on sidebar*/
@@ -89,7 +89,7 @@ body {
   margin-top: 10px;
 }
 
-#xAxis {
+#xAxis { /*styling for the x axis*/
   top: 75%;
   left: 10%;
   width: 60%;
@@ -98,7 +98,7 @@ body {
   position: absolute;
 }
 
-#yAxis {
+#yAxis { /*styling for the y axis*/
   top: 5%;
   left: 10%;
   width: 1px;
@@ -115,10 +115,11 @@ body {
   height: 100%;
 }
 
-.bars {
+.bars { /*styling for the bars*/
   left: 10%;
   top: 5%;
   width: 60%;
   height: 70%;
+  margin-bottom: 50px;
   position: absolute;
 }

@@ -10,7 +10,7 @@ const getCategories = function() {
   // Pull from each input box under the sub category class
   cat["subCatOne"] = [];
   $(".barCategoryName").each(function(){
-    cat["subCatOne"].push($( this ).val());
+    cat["subCatOne"].push(($( this ).val()).replace(/\s+/g, "-"));
   });
   cat["subCatOne"] = cat["subCatOne"].filter(e => e); // Filter out empty values
 
@@ -41,25 +41,13 @@ const getScaleByValue = function() {
 
 // Function to get value position from form
 const getValuePosition = function() {
-  return $("#valuePosition").val();
+  return $("#valuePositionSelector :selected").text();
 };
 
 // Function to get width of bars
 const getBarWidth = function() {
   return Number($("#barWidth").val());
 };
-
-/*
-// Function to get height of bars
-const getBarHeight = function() {
-  return Number($("#barHeight").val());
-};
-
-// Function to get spacing of bars
-const getBarSpacing = function() {
-  return Number($("#barSpacing").val());
-};
-*/
 
 // Function to create pickers for colour of bars
 const createBarColourPicker = function() {
@@ -96,8 +84,6 @@ const getBarColour = function() {
     // Update styling of bars in chart when new colour is picked and submitted
     $("#" + cats[i] + "Bar").css("background-color", categoryBarColour[cats[i]]);
   }
-
-  console.log(categoryBarColour); // Test output
 };
 
 // Function to get size of font for labels
@@ -140,9 +126,6 @@ const pullOptions = function() {
   options.push(getFontColour());
 
   createBarColourPicker(); // Create pickers for colour of bars
-
-  console.log(options); // Test output
-  console.log(data);
 };
 
 // Function to check if data was filled out
@@ -153,6 +136,7 @@ const filledOut = function() {
     if ($( this ).val() === "") { // Check if a mandatory input field is empty
       pulse(this);
       complete = false;
+      return complete;
     }
   });
 
@@ -177,13 +161,17 @@ const filledOut = function() {
     complete = false;
   }
 
+  let isNum = true;
   $(".mustBeNum").each(function() {
     if ($( this ).val() === "") { // Check if pulled inputs aren't numbers
       pulse(this);
-      alert("Ensure these values are numbers!");
       complete = false;
+      isNum = false;
     }
   });
+  if (!isNum) {
+    alert("Ensure number categories are numbers!");
+  }
 
   // Check if the scale value is divisible by the scale-by value
   if ($("#scaleValue").val() % $("#scaleByValue").val() !== 0) {
@@ -200,6 +188,20 @@ const filledOut = function() {
     complete = false;
   }
 
+  // Check if maximum scale value is equal to or larger than all category values
+  let scaleSmall = false;
+  for (let i = 0; i < tempCatValues.length; i++) {
+    if (tempCatValues[i] > Number($("#scaleValue").val())) {
+      scaleSmall = true;
+      complete = false;
+    }
+  }
+  if (scaleSmall) {
+    pulse(".barCategoryValue");
+    pulse("#scaleValue");
+    alert("Ensure the maximum scale value is not smaller than any of the category values!");
+  }
+
   return complete; // Return if form is complete
 };
 
@@ -212,8 +214,8 @@ const pulse = function(ele) {
   $(ele).fadeIn(500);
 }
 
-// Function to add elements in html to show drawn and generated bar chart
-const createChart = function() {
+// Function to draw the bars in the chart
+const drawBars = function() {
   const bars = $(".bars");
   const barSpacingX = (100 * (1 / data[0].length)); // How far apart bars should be based on number of categories
   let offsetPercentY;
@@ -245,6 +247,131 @@ const createChart = function() {
     });
     offsetPercentX += barSpacingX; // Increment x axis offset for bar styling
   }
+}
+
+// Function to draw the values attatched to the bars in the chart
+const drawBarValues = function() {
+  let i = 0;
+  let barValue = "";
+
+  $(".barValueData").remove(); // Reset html to redraw values of bars
+
+  $(".createdBars").each(function() {
+    barValue = options[0].subCatOne[i];
+
+    // Draw values on the top of the bars
+    if (options[3] === "Top") {
+      $( this ).append("<h4 class='barValueData' id='" + barValue + "Header'>" + data[0][i] + "</h4>");
+      $("#" + barValue + "Header").css({
+        "position": "relative",
+        "top": "-20px",
+        "margin": "0",
+        "text-align": "center",
+        "font-size": options[5],
+        "color": options[6]
+      });
+    // Draw values in the middle of the bars
+    } else if (options[3] === "Middle") {
+      $( this ).append("<h4 class='barValueData' id='" + barValue + "Header'>" + data[0][i] + "</h4>");
+      $("#" + barValue + "Header").css({
+        "position": "relative",
+        "top": "45%",
+        "margin": "0",
+        "text-align": "center",
+        "font-size": options[5],
+        "color": options[6]
+      });
+    // Draw values at the bottom of the bars
+    } else if (options[3] === "Bottom") {
+      $( this ).append("<h4 class='barValueData' id='" + barValue + "Header'>" + data[0][i] + "</h4>");
+      $("#" + barValue + "Header").css({
+        "position": "relative",
+        "bottom": "-webkit-calc(-100% + 25px)",
+        "bottom": "-moz-calc(-100% + 25px)",
+        "bottom": "-ms-calc(-100% + 25px)",
+        "bottom": "-o-calc(-100% + 25px)",
+        "bottom": "calc(-100% + 25px)",
+        "margin": "0",
+        "text-align": "center",
+        "font-size": options[5],
+        "color": options[6]
+      });
+    }
+    i++;
+
+    $( this ).append("<h3 class='barValueData' id='" + barValue + "Footer'>" + barValue + "</h3>");
+    $("#" + barValue + "Footer").css({
+      "position": "relative",
+      "bottom": "calc(-100% + 40px)",
+      "text-align": "center",
+      "font-size": options[5],
+      "color": options[6]
+    });
+  });
+};
+
+// Function to draw the values beside the y axis
+const drawYAxisData = function() {
+  $(".yAxisData").remove(); // Reset html to redraw y axis data
+
+  let yAxisScalePercent = 0;
+
+  // Draw scale for y axis
+  for (let i = options[1]; i >= 0; i -= options[2]) {
+    $("#yAxis").append("<p class='yAxisData' id='yAxisScale" + i + "'>" + i + "</p>");
+    $("#yAxisScale" + i).css({
+      "position": "absolute",
+      "margin": "0px",
+      "right": "10px",
+      "top": yAxisScalePercent + "%",
+      "font-size": "14px",
+      "color": options[6]
+    });
+    yAxisScalePercent += (((options[2] / options[1]) * 100));
+  }
+
+  $("#yAxis").append("<p class='yAxisData' id='yAxisName'>" + options[0].mainCatTwo + "</p>");
+  $("#yAxisName").css({
+    "position": "absolute",
+    "right": "0",
+    "top": "50%",
+    "margin": "0",
+    "text-align": "center",
+    "text-decoration": "underline",
+    "font-size": options[5] + "px",
+    "font-weight": "bold",
+    "color": options[6],
+    "-webkit-transform": "rotate(270deg)",
+    "-mox-transform": "rotate(270deg)",
+    "-ms-transform": "rotate(270deg)",
+    "-o-transform": "rotate(270deg)",
+    "transform": "rotate(270deg)"
+  });
+};
+
+// Function to draw the values under the x axis
+const drawXAxisData = function() {
+  $(".xAxisData").remove(); // Reset html to redraw x axis data
+
+  $("#xAxis").append("<p class='xAxisData' id='xAxisName'>" + options[0].mainCatOne + "</p>");
+  $("#xAxisName").css({
+    "position": "absolute",
+    "left": "40%",
+    "top": "20px",
+    "text-align": "center",
+    "text-decoration": "underline",
+    "font-size": options[5] + "px",
+    "font-weight": "bold",
+    "color": options[6]
+  });
+};
+
+// Function to add elements in html to show drawn and generated bar chart
+const createChart = function() {
+  drawBars();
+  drawBarValues();
+  drawYAxisData();
+  drawXAxisData();
 };
 
 // Function to call functions to check form and pull from it
@@ -261,6 +388,5 @@ const checkForm = function() {
     pullOptions(); // If the form is completed, pull data from inputs
     createChart();
   } else {
-    console.log("Incomplete Form");
   }
 };

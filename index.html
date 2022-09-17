@@ -19,7 +19,7 @@
     <div class="sidebar">
 
       <!-- title for side bar -->
-      <h2>Choose Options:</h2>
+      <h2>Chart Options:</h2>
 
       <!-- code for user input to configure the bar chart -->
       <form id="options">
@@ -47,15 +47,13 @@
         
         <!-- bar customization -->
         <h5>Position of Values:</h5>
-        <input type="text" class="mandatoryInput" id="valuePosition" placeholder="Top, Middle, Bottom..." value="">
+        <select id="valuePositionSelector">
+          <option value="Top">Top</option>
+          <option value="Middle">Middle</option>
+          <option value="Bottom">Bottom</option>
+        </select>
         <h5>Bar Width (px):</h5>
         <input type="number" class="mustBeNum" id="barWidth" min="1" placeholder="5, 10, 20..." value="">
-        <!--
-        <h5>Bar Height (px):</h5>
-        <input type="number" class="mustBeNum" id="barHeight" min="1" placeholder="5, 10, 20..." value="">
-        <h5>Bar Spacing (px):</h5>
-        <input type="number" class="mustBeNum" id="barSpacing" min="1" placeholder="5, 10, 20..." value="">
-        -->
 
         <!-- font customization -->
         <h5>Font Size (px):</h5>
