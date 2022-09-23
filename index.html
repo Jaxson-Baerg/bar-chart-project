@@ -13,6 +13,11 @@
 
       <!-- title for the top bar -->
       <h1 id="mainTitle">Customize and Generate a Bar Chart</h1>
+
+      <!-- links for example pages -->
+      <button id="firstDemo" type="button" onclick="examplePageClick(1)">Example Page 1</button>
+      <button id="secondDemo" type="button" onclick="examplePageClick(2)">Example Page 2</button>
+      <button id="thirdDemo" type="button" onclick="examplePageClick(3)">Example Page 3</button>
     </div>
 
     <!-- code for side bar on page -->
@@ -25,19 +30,27 @@
       <form id="options">
 
         <!-- user inputs -->
-        <h5>Main Category 1:</h5>
+        <h5>X Axis Data:</h5>
         <input type="text" class="mandatoryInput" id="mainCategoryOne" placeholder="Favourite Colour..." value="">
-        <h5>Main Category 2:</h5>
+        <h5>Y Axis Data:</h5>
         <input type="text" class="mandatoryInput" id="mainCategoryTwo" placeholder="Children..." value="">
-        <h5 id="subCategoryHeader">Sub Categories 1:</h5>
-        <input type="text" class="mandatoryInput barCategoryName" id="subCategoryOne" placeholder="Red..." value="">
-        <input type="text" class="barCategoryName" placeholder="Red..." value="">
-        <input type="text" class="barCategoryName" placeholder="Red..." value="">
-        <button id="addCategoryButton" type="button" onclick="addCategory()">Add Category</button>
-        <h5 id="categoryValueHeader">Category Values:</h5>
-        <input type="number" class="barCategoryValue mustBeNum" id="categoryValues" placeholder="1..." value="">
-        <input type="number" class="barCategoryValue" placeholder="2..." value="">
-        <input type="number" class="barCategoryValue" placeholder="3..." value="">
+
+        <h5 id="subCategoryTwoHeader">Y Axis Data Categories: </h5>
+        <input type="text" class="yCategoryName" id="subCategoryTwo-" placeholder="18-25(years)..." value="">
+        <input type="text" class="yCategoryName" id="subCategoryTwo--" placeholder="18-25(years)..." value="">
+        <input type="text" class="yCategoryName" id="subCategoryTwo---" placeholder="18-25(years)..." value="">
+        <button id="addYCategoryButton" type="button" onclick="addYCategory()">Add Y Axis Category</button>
+
+        <h5 id="subCategoryHeader">Bar Categories:</h5>
+        <input type="text" class="mandatoryInput barCategoryName" id="subCategory-" placeholder="Red..." value="">
+        <input type="text" class="barCategoryName" id="subCategory--" placeholder="Red..." value="">
+        <input type="text" class="barCategoryName" id="subCategory---" placeholder="Red..." value="">
+        <button id="addBarCategoryButton" type="button" onclick="addBarCategory()">Add Bar Category</button>
+        <h5 id="categoryValueHeader">Bar Categories Values:</h5>
+        <select id="barCategoryValueSelector"></select>
+        <input type="number" class="barCategoryValue mustBeNum" id="categoryValue-" placeholder="1..." value="">
+        <input type="number" class="barCategoryValue" id="categoryValue--" placeholder="2..." value="">
+        <input type="number" class="barCategoryValue" id="categoryValue---" placeholder="3..." value="">
         
         <!-- axes customization -->
         <h5 id="scaleValueHeader">Scale (max):</h5>
@@ -62,7 +75,7 @@
         <input type="color" id="fontColour" value="#525252">
 
         <!-- buttons to reset or submit -->
-        <button id="reset" type="reset">Reset Options</button>
+        <button id="resetButton" type="reset">Reset Options</button>
         <button id="generate" type="button" onclick="checkForm()">Generate</button>
       </form>
 

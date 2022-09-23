@@ -2,6 +2,20 @@ let options = []; // Array containing all custome options about bar chart
 let data = []; // Array containing data for bar chart
 let categoryBarColour = {}; // Object containing colours for each bar associated with a category
 
+// Function to get y axis category data
+const getYAxisCategories = function() {
+  let cat = {};
+  cat.mainCatTwo = $("#mainCategoryTwo").val();
+
+  // Pull from each input box under the sub category class
+  cat["subCatTwo"] = [];
+  $(".yCategoryName").each(function(){
+    cat["subCatTwo"].push(($( this ).val()).replace(/\s+/g, "-"));
+  });
+  cat["subCatTwo"] = cat["subCatTwo"].filter(e => e); // Filter out empty values
+  return cat;
+};
+
 // Function to get category data from form
 const getCategories = function() {
   let cat = {};
@@ -10,11 +24,9 @@ const getCategories = function() {
   // Pull from each input box under the sub category class
   cat["subCatOne"] = [];
   $(".barCategoryName").each(function(){
-    cat["subCatOne"].push(($( this ).val()).replace(/\s+/g, "-"));
+    cat["subCatOne"].push(($( this ).val()).replace(/\s+/g, "-").replace(/:/g, ""));
   });
   cat["subCatOne"] = cat["subCatOne"].filter(e => e); // Filter out empty values
-
-  cat.mainCatTwo = $("#mainCategoryTwo").val();
   return cat;
 };
 
@@ -65,9 +77,9 @@ const createBarColourPicker = function() {
     form.append("<label for='" + cats[i] + "' class='colourPickers'>" + cats[i] + ":" + "</label>");
     // Define and append pickers
     if (categoryBarColour[cats[i]] === undefined) {
-      form.append("<input id='" + cats[i] + "' class='colourPickers' type='color' value='#3E89B8'>");
+      form.append("<input id='barColourPicker" + repeat("-", i + 1) + "' class='colourPickers' type='color' value='#3E89B8'>");
     } else {
-      form.append("<input id='" + cats[i] + "' class='colourPickers' type='color' value='" + categoryBarColour[cats[i]] + "'>");
+      form.append("<input id='barColourPicker" + repeat("-", i + 1) + "' class='colourPickers' type='color' value='" + categoryBarColour[cats[i]] + "'>");
     }
   }
   // Define and append button for submitting picked colours
@@ -79,10 +91,10 @@ const getBarColour = function() {
   let cats = options[0].subCatOne;
   // Pushed inputted colours of bars into global object
   for (let i = 0; i < cats.length; i++) {
-    categoryBarColour[cats[i]] = $("#" + cats[i]).val();
+    categoryBarColour[cats[i]] = $("#barColourPicker" + repeat("-", i + 1)).val();
 
     // Update styling of bars in chart when new colour is picked and submitted
-    $("#" + cats[i] + "Bar").css("background-color", categoryBarColour[cats[i]]);
+    $("#Bar" + repeat("-", i + 1)).css("background-color", categoryBarColour[cats[i]]);
   }
 };
 
@@ -97,13 +109,30 @@ const getFontColour = function() {
 };
 
 // Function to add an input box for an additional category and value to be inputted
-const addCategory = function() {
-  const prevIdOne = $("#addCategoryButton").prevAll("input").length - 2;
-  const prevIdTwo = $("#scaleValueHeader").prevAll("input").length - (prevIdOne + 2);
+const addBarCategory = function() {
+  const prevIdAxisCat = $("#addYCategoryButton").prevAll("input").length - 2;
+  const prevIdOne = $("#addBarCategoryButton").prevAll("input").length - (prevIdAxisCat + 2);
+  const prevIdTwo = $("#scaleValueHeader").prevAll("input").length - (prevIdAxisCat + prevIdOne + 2);
 
-  $("#addCategoryButton").before("<input type='text' class='barCategoryName' placeholder='Red...' value=''>");
-  $("#scaleValueHeader").before("<input type='number' class='barCategoryValue' placeholder='" + (prevIdTwo + 1).toString() + "...' value=''>");
+  $("#addBarCategoryButton").before("<input type='text' class='barCategoryName added' id='subCategory" + repeat("-", prevIdOne + 1) + "' placeholder='Red...' value=''>");
+  //$("#scaleValueHeader").before("<input type='number' class='barCategoryValue added' id='categoryValue" + repeat("-", prevIdTwo + 1) + "' placeholder='" + (prevIdTwo + 1).toString() + "...' value=''>");
+};
+
+// Function to add y axis category
+const addYCategory = function() {
+  const prevId = $("#addYCategoryButton").prevAll("input").length - 2;
+
+  $("#addYCategoryButton").before("<input type='text' class='yCategoryName added' id='subCategoryTwo" + repeat("-", prevId + 1) + "' placeholder='18-25(years)...' value=''>");
 }
+
+// Function to repeat a character n times
+const repeat = function(char, times) {
+  let result = "";
+  for (let i = 0; i < times; i++) {
+    result += char;
+  }
+  return result;
+};
 
 // Function to pull data
 const pullOptions = function() {
@@ -118,12 +147,9 @@ const pullOptions = function() {
   options.push(getScaleByValue());
   options.push(getValuePosition());
   options.push(getBarWidth());
-  /*
-  options.push(getBarHeight());
-  options.push(getBarSpacing());
-  */
   options.push(getFontSize());
   options.push(getFontColour());
+  options.push(getYAxisCategories());
 
   createBarColourPicker(); // Create pickers for colour of bars
 };
@@ -216,6 +242,9 @@ const pulse = function(ele) {
 
 // Function to draw the bars in the chart
 const drawBars = function() {
+  let split;
+  options[7].subCatTwo.length > 0 ? split = true : split = false;
+
   const bars = $(".bars");
   const barSpacingX = (100 * (1 / data[0].length)); // How far apart bars should be based on number of categories
   let offsetPercentY;
@@ -235,9 +264,9 @@ const drawBars = function() {
     }
 
     // Append html container to pages
-    bars.append("<div id='" + options[0].subCatOne[i] + "Bar' class='createdBars'></div>");
+    bars.append("<div id='Bar" + repeat("-", i + 1) + "' class='createdBars'></div>");
     // Style appended html container
-    $("#" + options[0].subCatOne[i] + "Bar").css({
+    $("#Bar" + repeat("-", i + 1)).css({
       "position": "absolute",
       "bottom": "0",
       "left": offsetPercentX + "%",
@@ -245,7 +274,22 @@ const drawBars = function() {
       "width": options[4] + "px",
       "background-color": tempColour
     });
+
+    if (split) {
+      $("#Bar" + repeat("-", i + 1)).css({
+        "height": "100%"
+      });
+    }
+
     offsetPercentX += barSpacingX; // Increment x axis offset for bar styling
+
+    for (let x = 0; x < options[7].subCatTwo.length; x++) {
+      $("#Bar" + repeat("-", i + 1)).append("<div id='subBar" + repeat("-", x + 1) +"' class='createdSubBars'></div>");
+
+      $("#Bar" + repeat("-", x + 1)).css({
+
+      });
+    }
   }
 }
 
@@ -330,7 +374,7 @@ const drawYAxisData = function() {
     yAxisScalePercent += (((options[2] / options[1]) * 100));
   }
 
-  $("#yAxis").append("<p class='yAxisData' id='yAxisName'>" + options[0].mainCatTwo + "</p>");
+  $("#yAxis").append("<p class='yAxisData' id='yAxisName'>" + options[7].mainCatTwo + "</p>");
   $("#yAxisName").css({
     "position": "absolute",
     "right": "0",
@@ -372,6 +416,106 @@ const createChart = function() {
   drawBarValues();
   drawYAxisData();
   drawXAxisData();
+};
+
+const examplePageClick = function(num) {
+  refreshInputs();
+
+  if (num === 1) {
+    examplePageOne();
+  } else if (num === 2) {
+    examplePageTwo();
+  } else if (num === 3) {
+    examplePageThree();
+  }
+}
+
+const refreshInputs = function() {
+  $("#options")[0].reset();
+  $(".added").remove();
+}
+
+// Function to populate data and draw example chart one
+const examplePageOne = function() {
+  $("#mainCategoryOne").val("Favourite Colour");
+  $("#mainCategoryTwo").val("Children");
+  $("#subCategory-").val("Red");
+  $("#subCategory--").val("Blue");
+  $("#subCategory---").val("Yellow");
+  $("#categoryValue-").val("3");
+  $("#categoryValue--").val("7");
+  $("#categoryValue---").val("5");
+  $("#scaleValue").val("10");
+  $("#scaleByValue").val("1");
+  $("#valuePositionSelector").val("Top");
+  $("#barWidth").val("150");
+  $("#fontSize").val("20");
+  $("#fontColour").val("#525252");
+  checkForm();
+  $("#barColourPicker-").val("#B83E42");
+  $("#barColourPicker--").val("#3E89BB");
+  $("#barColourPicker---").val("#D3C535");
+  getBarColour();
+};
+
+// Function to populate data and draw example chart two
+const examplePageTwo = function() {
+  $("#mainCategoryOne").val("Favourite Game");
+  $("#mainCategoryTwo").val("People");
+  $("#mainCategoryThree").val("Age(years)");
+  addYCategory();
+  $("#subCategoryTwo-").val("13-18");
+  $("#subCategoryTwo--").val("19-29");
+  $("#subCategoryTwo---").val("30-49");
+  $("#subCategoryTwo----").val("50+");
+  addBarCategory();
+  addBarCategory();
+  $("#subCategory-").val("Bloodborne");
+  $("#subCategory--").val("The Witcher 3: Wild Hunt");
+  $("#subCategory---").val("The Last of Us: Part 2");
+  $("#subCategory----").val("Rimworld");
+  $("#subCategory-----").val("Call of Cthulhu");
+  $("#categoryValue-").val("67");
+  $("#categoryValue--").val("43");
+  $("#categoryValue---").val("82");
+  $("#categoryValue----").val("3");
+  $("#categoryValue-----").val("29");
+  $("#scaleValue").val("100");
+  $("#scaleByValue").val("5");
+  $("#valuePositionSelector").val("Middle");
+  $("#barWidth").val("70");
+  $("#fontSize").val("16");
+  $("#fontColour").val("#525252");
+  checkForm();
+  $("#barColourPicker-").val("#B83E42");
+  $("#barColourPicker--").val("#3E89BB");
+  $("#barColourPicker---").val("#D3C535");
+  $("#barColourPicker----").val("#D3C535");
+  $("#barColourPicker-----").val("#D3C535");
+  getBarColour();
+};
+
+// Function to populate data and draw example chart three
+const examplePageThree = function() {
+  $("#mainCategoryOne").val("Favourite Colour");
+  $("#mainCategoryTwo").val("Children");
+  $("#subCategory-").val("Red");
+  $("#subCategory--").val("Blue");
+  $("#subCategory---").val("Yellow");
+  $("#categoryValue-").val("3");
+  $("#categoryValue--").val("7");
+  $("#categoryValue---").val("5");
+  $("#scaleValue").val("10");
+  $("#scaleByValue").val("1");
+  $("#valuePositionSelector").val("Top");
+  $("#barWidth").val("200");
+  $("#fontSize").val("20");
+  $("#fontColour").val("#525252");
+  checkForm();
+  $("#Red").val("#B83E42");
+  $("#Blue").val("#3E89BB");
+  $("#Yellow").val("#D3C535");
+  getBarColour();
 };
 
 // Function to call functions to check form and pull from it
