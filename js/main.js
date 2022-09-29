@@ -33,7 +33,7 @@ const getCategories = function() {
 // Function to get category values
 const getCategoryValues = function() {
   let categoryValues = [];
-  $(".barCategoryValue").each(function() {
+  $(".barCategoryValue, .barCategoryValue:hidden").each(function() {
     categoryValues.push($( this ).val());
   });
   categoryValues = categoryValues.filter(Number); // Filter out empty values
@@ -158,75 +158,75 @@ const pullOptions = function() {
 const filledOut = function() {
   let complete = true;
 
-  $(".mandatoryInput").each(function() {
-    if ($( this ).val() === "") { // Check if a mandatory input field is empty
-      pulse(this);
-      complete = false;
-      return complete;
-    }
-  });
+  // $(".mandatoryInput").each(function() {
+  //   if ($( this ).val() === "") { // Check if a mandatory input field is empty
+  //     pulse(this);
+  //     complete = false;
+  //     return complete;
+  //   }
+  // });
 
-  // Temporarily get inputs to test if the number of each matches
-  let tempCatNames = [];
-  $(".barCategoryName").each(function() {
-    if ($( this ).val() !== "") {
-      tempCatNames.push($( this ).val());
-    }
-  });
-  let tempCatValues = [];
-  $(".barCategoryValue").each(function() {
-    if ($( this ).val() !== "") {
-      tempCatValues.push($( this ).val());
-    }
-  });
-  // Check if the number of categories and number of values for those categories are equal
-  if (tempCatNames.length !== tempCatValues.length) {
-    pulse("#subCategoryHeader");
-    pulse("#categoryValueHeader");
-    alert("Ensure the number of values matches the number of categories!");
-    complete = false;
-  }
+  // // Temporarily get inputs to test if the number of each matches
+  // let tempCatNames = [];
+  // $(".barCategoryName").each(function() {
+  //   if ($( this ).val() !== "") {
+  //     tempCatNames.push($( this ).val());
+  //   }
+  // });
+  // let tempCatValues = [];
+  // $(".barCategoryValue").each(function() {
+  //   if ($( this ).val() !== "") {
+  //     tempCatValues.push($( this ).val());
+  //   }
+  // });
+  // // Check if the number of categories and number of values for those categories are equal
+  // if (tempCatNames.length !== tempCatValues.length) {
+  //   pulse("#subCategoryHeader");
+  //   pulse("#categoryValueHeader");
+  //   alert("Ensure the number of values matches the number of categories!");
+  //   complete = false;
+  // }
 
-  let isNum = true;
-  $(".mustBeNum").each(function() {
-    if ($( this ).val() === "") { // Check if pulled inputs aren't numbers
-      pulse(this);
-      complete = false;
-      isNum = false;
-    }
-  });
-  if (!isNum) {
-    alert("Ensure number categories are numbers!");
-  }
+  // let isNum = true;
+  // $(".mustBeNum").each(function() {
+  //   if ($( this ).val() === "") { // Check if pulled inputs aren't numbers
+  //     pulse(this);
+  //     complete = false;
+  //     isNum = false;
+  //   }
+  // });
+  // if (!isNum) {
+  //   alert("Ensure number categories are numbers!");
+  // }
 
-  // Check if the scale value is divisible by the scale-by value
-  if ($("#scaleValue").val() % $("#scaleByValue").val() !== 0) {
-    pulse("#scaleValue");
-    pulse("#scaleByValue");
-    alert("Ensure the scale is divisible by the scale-by value!");
-    complete = false;
-  }
+  // // Check if the scale value is divisible by the scale-by value
+  // if ($("#scaleValue").val() % $("#scaleByValue").val() !== 0) {
+  //   pulse("#scaleValue");
+  //   pulse("#scaleByValue");
+  //   alert("Ensure the scale is divisible by the scale-by value!");
+  //   complete = false;
+  // }
 
-  // Check if the bar width value doesn't exceed the side of the x-axis
-  if ($("#barWidth").val() > Math.round((((Number($("#xAxis").css("width").replace("px", ""))) / tempCatValues.length) - 25))) {
-    pulse("#barWidth");
-    alert("Ensure the bar width isn't larger than " + (Math.round((((Number($("#xAxis").css("width").replace("px", ""))) / tempCatValues.length) - 25))).toString() + "px!");
-    complete = false;
-  }
+  // // Check if the bar width value doesn't exceed the side of the x-axis
+  // if ($("#barWidth").val() > Math.round((((Number($("#xAxis").css("width").replace("px", ""))) / tempCatValues.length) - 25))) {
+  //   pulse("#barWidth");
+  //   alert("Ensure the bar width isn't larger than " + (Math.round((((Number($("#xAxis").css("width").replace("px", ""))) / tempCatValues.length) - 25))).toString() + "px!");
+  //   complete = false;
+  // }
 
-  // Check if maximum scale value is equal to or larger than all category values
-  let scaleSmall = false;
-  for (let i = 0; i < tempCatValues.length; i++) {
-    if (tempCatValues[i] > Number($("#scaleValue").val())) {
-      scaleSmall = true;
-      complete = false;
-    }
-  }
-  if (scaleSmall) {
-    pulse(".barCategoryValue");
-    pulse("#scaleValue");
-    alert("Ensure the maximum scale value is not smaller than any of the category values!");
-  }
+  // // Check if maximum scale value is equal to or larger than all category values
+  // let scaleSmall = false;
+  // for (let i = 0; i < tempCatValues.length; i++) {
+  //   if (tempCatValues[i] > Number($("#scaleValue").val())) {
+  //     scaleSmall = true;
+  //     complete = false;
+  //   }
+  // }
+  // if (scaleSmall) {
+  //   pulse(".barCategoryValue");
+  //   pulse("#scaleValue");
+  //   alert("Ensure the maximum scale value is not smaller than any of the category values!");
+  // }
 
   return complete; // Return if form is complete
 };
@@ -246,14 +246,14 @@ const drawBars = function() {
   options[7].subCatTwo.length > 0 ? split = true : split = false;
 
   const bars = $(".bars");
-  const barSpacingX = (100 * (1 / data[0].length)); // How far apart bars should be based on number of categories
+  const barSpacingX = (100 * (1 / options[0].subCatOne.length)); // How far apart bars should be based on number of categories
   let offsetPercentY;
   let offsetPercentX = 5;
 
   $(".createdBars").remove(); // Remove any previously created and appended bars
 
   // Loop through each category to create and style bars for said category
-  for (let i = 0; i < data[0].length; i++) {
+  for (let i = 0; i < options[0].subCatOne.length; i++) {
     offsetPercentY = 100 * (data[0][i] / options[1]);
     let tempColour;
     // Check if the colour of the category has already been picked
@@ -264,7 +264,14 @@ const drawBars = function() {
     }
 
     // Append html container to pages
-    bars.append("<div id='Bar" + repeat("-", i + 1) + "' class='createdBars'></div>");
+    if (getYAxisCategories().subCatTwo.length === 0) {
+      bars.append("<div id='Bar" + repeat("-", i + 1) + "' class='createdBars'></div>");
+    } else {
+      bars.append("<div id='Bar" + repeat("-", i + 1) + "' class='createdBars'></div>");
+      for (let x = 0; x < getYAxisCategories().subCatTwo.length; x++) {
+        $(`#Bar${repeat("-", i + 1)}`).append(`<div id='subBar${repeat("-", i + 1)}${repeat("y", x + 1)}' class='createdSubBars'></div>`);
+      }
+    }
     // Style appended html container
     $("#Bar" + repeat("-", i + 1)).css({
       "position": "absolute",
@@ -283,13 +290,13 @@ const drawBars = function() {
 
     offsetPercentX += barSpacingX; // Increment x axis offset for bar styling
 
-    for (let x = 0; x < options[7].subCatTwo.length; x++) {
-      $("#Bar" + repeat("-", i + 1)).append("<div id='subBar" + repeat("-", x + 1) +"' class='createdSubBars'></div>");
+    // for (let x = 0; x < options[7].subCatTwo.length; x++) {
+    //   $("#Bar" + repeat("-", i + 1)).append("<div id='subBar" + repeat("-", x + 1) +"' class='createdSubBars'></div>");
 
-      $("#Bar" + repeat("-", x + 1)).css({
+    //   $("#Bar" + repeat("-", x + 1)).css({
 
-      });
-    }
+    //   });
+    // }
   }
 }
 
@@ -442,9 +449,10 @@ const examplePageOne = function() {
   $("#subCategory-").val("Red");
   $("#subCategory--").val("Blue");
   $("#subCategory---").val("Yellow");
-  $("#categoryValue-").val("3");
-  $("#categoryValue--").val("7");
-  $("#categoryValue---").val("5");
+  checkCategoryNames();
+  $("#barCategoryValue-y:hidden").val("3");
+  $("#barCategoryValue--y:hidden").val("7");
+  $("#barCategoryValue---y:hidden").val("5");
   $("#scaleValue").val("10");
   $("#scaleByValue").val("1");
   $("#valuePositionSelector").val("Top");
@@ -475,23 +483,39 @@ const examplePageTwo = function() {
   $("#subCategory---").val("The Last of Us: Part 2");
   $("#subCategory----").val("Rimworld");
   $("#subCategory-----").val("Call of Cthulhu");
-  $("#categoryValue-").val("67");
-  $("#categoryValue--").val("43");
-  $("#categoryValue---").val("82");
-  $("#categoryValue----").val("3");
-  $("#categoryValue-----").val("29");
+  checkCategoryNames();
+  $("#barCategoryValue-y").val("4");
+  $("#barCategoryValue-yy").val("56");
+  $("#barCategoryValue-yyy").val("21");
+  $("#barCategoryValue-yyyy").val("13");
+  $("#barCategoryValue--y").val("11");
+  $("#barCategoryValue--yy").val("43");
+  $("#barCategoryValue--yyy").val("19");
+  $("#barCategoryValue--yyyy").val("8");
+  $("#barCategoryValue---y").val("6");
+  $("#barCategoryValue---yy").val("73");
+  $("#barCategoryValue---yyy").val("23");
+  $("#barCategoryValue---yyyy").val("4");
+  $("#barCategoryValue----y").val("3");
+  $("#barCategoryValue----yy").val("12");
+  $("#barCategoryValue----yyy").val("6");
+  $("#barCategoryValue----yyyy").val("1");
+  $("#barCategoryValue-----y").val("2");
+  $("#barCategoryValue-----yy").val("29");
+  $("#barCategoryValue-----yyy").val("7");
+  $("#barCategoryValue-----yyyy").val("5");
   $("#scaleValue").val("100");
   $("#scaleByValue").val("5");
   $("#valuePositionSelector").val("Middle");
-  $("#barWidth").val("70");
+  $("#barWidth").val("150");
   $("#fontSize").val("16");
   $("#fontColour").val("#525252");
   checkForm();
   $("#barColourPicker-").val("#B83E42");
-  $("#barColourPicker--").val("#3E89BB");
-  $("#barColourPicker---").val("#D3C535");
-  $("#barColourPicker----").val("#D3C535");
-  $("#barColourPicker-----").val("#D3C535");
+  $("#barColourPicker--").val("#D88600");
+  $("#barColourPicker---").val("#0C7D00");
+  $("#barColourPicker----").val("#1D6598");
+  $("#barColourPicker-----").val("#84D248");
   getBarColour();
 };
 
@@ -533,4 +557,81 @@ const checkForm = function() {
     createChart();
   } else {
   }
+};
+
+const clearValueSelector = function() {
+  $(".categoryValueSelectors").remove();
+};
+
+const checkCategoryNames = function() {
+  const cats = getCategories().subCatOne;
+  const subCats = getYAxisCategories().subCatTwo;
+  selector = $("#barCategoryValueSelector");
+
+  $(".categoryValueSelectors").remove();
+  $(".barCategoryValue").remove();
+
+  for (let i = 0; i < cats.length; i++) {
+    selector.append(`<option class='categoryValueSelectors' value='${cats[i]}'>${cats[i]}</option>`);
+    for (let x = 0; x < subCats.length; x++) {
+      selector.after(`<input hidden type='text' class='barCategoryValue' id='barCategoryValue${repeat("-", i + 1)}${repeat("y", x + 1)}' placeholder='1...' value=''>`);
+    }
+  }
+
+  if (subCats.length === 0) {
+    for (let i = 0; i < cats.length; i++) {
+      selector.after(`<input hidden type='text' class='barCategoryValue' id='barCategoryValue${repeat("-", i + 1)}y' placeholder='1...' value=''>`);
+    }
+  }
+};
+
+const drawCategoryValueInput = function(selected) {
+  $(".barCategoryValue").hide();
+
+  let leng = [];
+  $(".categoryValueSelectors").each(function() {
+    $( this ).val() === $("#barCategoryValueSelector").val() ? leng.push(1) : leng.push(0);
+  });
+
+  let idNum = 0;
+  for (index of leng) {
+    if (index) {
+      idNum++;
+      break;
+    } else {
+      idNum++;
+    }
+  }
+  
+  for (let i = 0; i < getYAxisCategories().subCatTwo.length; i++) {
+    $(`#barCategoryValue${repeat("-", idNum)}${repeat("y", i + 1)}:hidden`).show();
+  }
+  if (getYAxisCategories().subCatTwo.length === 0) {
+    $(`#barCategoryValue${repeat("-", idNum)}y:hidden`).show();
+  }
+};
+
+let temp = {};
+
+window.onload = () => {
+  checkCategoryNames();
+  $(".barCategoryValue").hide();
+
+  $(".yCategoryName, .barCategoryName").on("keydown", function(key) {
+    checkCategoryNames();
+  });
+  $(".yCategoryName, .barCategoryName").on("keyup", function(key) {
+    checkCategoryNames();
+  });
+
+  $("#barCategoryValueSelector").on("change", function() {
+    if ($(this).val() !== "") {
+      drawCategoryValueInput(this);
+    } else {
+      $(".barCategoryValue").hide();
+    }
+    $(".barCategoryValue, .barCategoryValue:hidden").each(function() {
+      temp[$(this).attr("id")] = $(this).val();
+    });
+  });
 };

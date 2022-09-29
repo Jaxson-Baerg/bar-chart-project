@@ -47,11 +47,10 @@
         <input type="text" class="barCategoryName" id="subCategory---" placeholder="Red..." value="">
         <button id="addBarCategoryButton" type="button" onclick="addBarCategory()">Add Bar Category</button>
         <h5 id="categoryValueHeader">Bar Categories Values:</h5>
-        <select id="barCategoryValueSelector"></select>
-        <input type="number" class="barCategoryValue mustBeNum" id="categoryValue-" placeholder="1..." value="">
-        <input type="number" class="barCategoryValue" id="categoryValue--" placeholder="2..." value="">
-        <input type="number" class="barCategoryValue" id="categoryValue---" placeholder="3..." value="">
-        
+        <select id="barCategoryValueSelector" onchange="drawCategoryValueInput()">
+          <option id="barCategoryValueDefault" type="test" placeholder="1..." value=""></option>
+        </select>
+
         <!-- axes customization -->
         <h5 id="scaleValueHeader">Scale (max):</h5>
         <input type="number" class="mustBeNum" id="scaleValue" min="1" placeholder="100..." value="">
@@ -75,7 +74,7 @@
         <input type="color" id="fontColour" value="#525252">
 
         <!-- buttons to reset or submit -->
-        <button id="resetButton" type="reset">Reset Options</button>
+        <button id="resetButton" type="reset" onclick="clearValueSelector()">Reset Options</button>
         <button id="generate" type="button" onclick="checkForm()">Generate</button>
       </form>
 
